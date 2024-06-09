@@ -1,0 +1,24 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compromise": "^14.13.0",
+    "cors": "^2.8.5",
+    "dotnet": "^1.1.4",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.0",
+    "natural": "^7.0.6",
+    "openai": "^4.47.2",
+    "puppeteer": "^22.9.0",
+    "translate-google": "^1.5.0"
+  }
+}
