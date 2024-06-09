@@ -3,7 +3,7 @@ import { News } from "../Model/News.js";
 import { textToTranslate } from "../Utility/TextToTranslate.js";
 // import { getImageUrlWithoutQueryParams } from "../Utility/ImageUrlWithoutQueryParams.js";
 
-const linkActivity = ""
+const linkActivity = "https://scraping-news.onrender.com"
 
 export const MainScraping = async (
   browser,
