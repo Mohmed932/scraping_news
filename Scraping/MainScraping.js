@@ -76,9 +76,5 @@ export const MainScraping = async (
   } catch (error) {
     // console.error("An error occurred:", error);
     if (error) throw error;
-  } finally {
-    if (page) {
-      await page.close();
-    }
-  }
+  } 
 };
