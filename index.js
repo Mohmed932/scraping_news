@@ -4,18 +4,12 @@ import puppeteer from "puppeteer";
 import { newsRoute } from "./Route/News.js";
 import mongoose from "mongoose";
 import { config } from "dotenv";
-import { Ajnet } from "./Scraping/Ajnet.js";
-import { Alghad } from "./Scraping/Alghad.js";
-import { Alhurra } from "./Scraping/Alhurra.js";
+// import { Almasryalyoum } from "./Scraping/Almasryalyoum.js";
+import { Chinadaily } from "./Scraping/Chinadaily.js";
+import { Cgtn } from "./Scraping/Cgtn.js";
+import { Qudsn } from "./Scraping/Qudsn.js";
+import { Elbyan } from "./Scraping/Elbyan.js";
 import { Alqaheranews } from "./Scraping/Alqaheranews.js";
-import { Aawsat } from "./Scraping/Aawsat.js";
-import { Asharq } from "./Scraping/Asharq.js";
-
-// import { Edition } from "./Scraping/Edition.js";
-// import { Bbc } from "./Scraping/Bbc.js";
-// import { Aljazeera } from "./Scraping/Aljazeera.js";
-// import { Apnews } from "./Scraping/Apnews.js";
-// import { SkyNews } from "./Scraping/SkyNews.js";
 config();
 const server = express();
 
@@ -36,6 +30,7 @@ server.get("/", (req, res) => {
   let browser;
   try {
     browser = await puppeteer.launch({
+      headless:false,
       args: [
         "--disable-setuid-sandbox",
         "--no-sandbox",
@@ -48,12 +43,12 @@ server.get("/", (req, res) => {
           : puppeteer.executablePath(),
     });
     while (true) {
-      await Ajnet(browser);
-      await Alghad(browser);
-      await Alhurra(browser);
+      // await Almasryalyoum(browser);
       await Alqaheranews(browser);
-      await Aawsat(browser);
-      await Asharq(browser);
+      await Cgtn(browser);
+      await Qudsn(browser);
+      await Chinadaily(browser);
+      await Elbyan(browser);
     }
   } catch (error) {
     console.error(error);
@@ -79,8 +74,3 @@ server.use("*", (req, res) => {
     return res.json({ message: error.message });
   }
 });
-
-// 1-https://edition.cnn.com/
-// 2-https://www.bbc.com/
-// 4-https://www.aljazeera.com/
-// 8-https://apnews.com/

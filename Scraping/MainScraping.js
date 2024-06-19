@@ -1,9 +1,11 @@
 import { ParagraphText } from "../Utility/ParagraphText.js";
 import { News } from "../Model/News.js";
 import { textToTranslate } from "../Utility/TextToTranslate.js";
-// import { getImageUrlWithoutQueryParams } from "../Utility/ImageUrlWithoutQueryParams.js";
+import { DeleteDocuments } from "../Utility/DeleteDecoument.js";
+// import { PostToFacebookPage } from "../SocialMedia/Facebook.js";
+// import { PostToInstagramPage } from "../SocialMedia/instagram.js";
 
-const linkActivity = "https://scraping-news.onrender.com"
+const linkActivity = "https://scraping-news.onrender.com";
 
 export const MainScraping = async (
   browser,
@@ -20,10 +22,10 @@ export const MainScraping = async (
     page.setDefaultNavigationTimeout(0); // Disable timeout
 
     for (let i = 0; i < links.length; i++) {
-      const { kind, link } = links[i];
+      const { kind, link, category } = links[i];
 
       try {
-        await page.goto(linkActivity)
+        await page.goto(linkActivity);
         await page.goto(link, { timeout: 0 });
         await page.waitForSelector(selector);
 
@@ -46,8 +48,6 @@ export const MainScraping = async (
 
         const desc = await ParagraphText(page, ParagraphClassName);
         title = await textToTranslate(title);
-        const category = await textToTranslate(kind);
-        // img = getImageUrlWithoutQueryParams(img);
         const article = {
           title,
           img,
@@ -55,18 +55,27 @@ export const MainScraping = async (
           category,
           desc,
         };
-        const data = new News(article);
-        await data.save();
-        console.log("data saved");
+        if (title !== "" && desc[0] !== "" && img !== "") {
+          // const checkTitle = await News.findOne({ title });
+          DeleteDocuments();
+          const data = new News(article);
+          await data.save();
+          // const linkNews = ``;
+          // PostToFacebookPage(process.env.PAGE_ID,data.title,linkNews,process.env.ACCESS_TOKEN,data.img)
+          // PostToInstagramPage(process.env.PAGE_ID,data.title,linkNews,process.env.ACCESS_TOKEN,data.img)
+          console.log("data saved");
+        }
       } catch (error) {
-        console.error(
-          `An error occurred while processing link ${link}:`,
-          error
-        );
+        if (error) throw error;
+        // console.error(
+        //   `An error occurred while processing link ${link}:`,
+        //   error
+        // );
       }
     }
   } catch (error) {
-    console.error("An error occurred:", error);
+    // console.error("An error occurred:", error);
+    if (error) throw error;
   } finally {
     if (page) {
       await page.close();
