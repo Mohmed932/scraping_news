@@ -11,6 +11,7 @@ import { Qudsn } from "./Scraping/Qudsn.js";
 import { Elbyan } from "./Scraping/Elbyan.js";
 import { Alqaheranews } from "./Scraping/Alqaheranews.js";
 config();
+
 const server = express();
 
 server.use(express.json());
@@ -25,7 +26,6 @@ server.get("/", (req, res) => {
 });
 
 // puppeteer function
-
 (async () => {
   let browser;
   try {
@@ -43,16 +43,37 @@ server.get("/", (req, res) => {
           : puppeteer.executablePath(),
     });
     while (true) {
-      // await Almasryalyoum(browser);
-      await Alqaheranews(browser);
-      await Cgtn(browser);
-      await Qudsn(browser);
-      await Chinadaily(browser);
-      await Elbyan(browser);
+      try {
+        await Alqaheranews(browser);
+      } catch (error) {
+        console.error("Error in Alqaheranews:", error);
+      }
+      try {
+        await Cgtn(browser);
+      } catch (error) {
+        console.error("Error in Cgtn:", error);
+      }
+      try {
+        await Qudsn(browser);
+      } catch (error) {
+        console.error("Error in Qudsn:", error);
+      }
+      try {
+        await Chinadaily(browser);
+      } catch (error) {
+        console.error("Error in Chinadaily:", error);
+      }
+      try {
+        await Elbyan(browser);
+      } catch (error) {
+        console.error("Error in Elbyan:", error);
+      }
     }
   } catch (error) {
     console.error(error);
-    await browser.close();
+    if (browser) {
+      await browser.close();
+    }
   }
 })();
 
@@ -60,7 +81,7 @@ mongoose
   .connect(process.env.MONGODB_URL)
   .then(() => {
     server.listen(5001, () => {
-      console.log("server listening on port 5000");
+      console.log("server listening on port 5001");
     });
   })
   .catch(() => {
